@@ -1,31 +1,39 @@
 class NegociacaoController {
 
+    /*
+        Por padrão se nao for definido um constructor, ele vem vazio
+
+        constructor() {}
+
+     */
+
     constructor() {
         let $ = document.querySelector.bind(document)
         this._inputData = $('#data')
         this._inputQuantidade = $('#quantidade')
         this._inputValor = $('#valor')
+        this._listaNegociacoes = new ListNegociacoes()
     }
 
     adiciona(event) {
         event.preventDefault()
-        console.log(this._inputData.value)
+        this._listaNegociacoes.adiciona(this._criarNegociacao())
+        this._limpaForm()
+        console.log(this._listaNegociacoes.negociacao)
+    }
 
-        let data = new Date(
-            ...this._inputData
-                .value
-                .split('-')
-                .map((item, index) =>
-                    item - index % 2
-                ))
-        console.log(data)
-
-        let negociacao = new Negociacao(
-            data,
+    _criarNegociacao() {
+        return new Negociacao(
+            DateHelper.txtToData(this._inputData.value),
             this._inputQuantidade.value,
             this._inputValor.value
         )
-        console.log(negociacao)
     }
 
+    _limpaForm() {
+        this._inputData.value = ''
+        this._inputValor.value = 0
+        this._inputQuantidade = 0
+        this._inputData.focus()
+    }
 }
